@@ -1,9 +1,19 @@
+# 🌌 Kuantum-Geçidi: Kuantum Işınlanma Rehberi
 
-# 🌌 Kuantum-Geçidi: Kuantum Işınlanma ve Temel İlkeler Rehberi
+![Kuantum Geçidi Banner](assets/banner.png)
 
 **Kuantum-Geçidi**, kuantum mekaniğinin en büyüleyici fenomenlerinden biri olan "Kuantum Işınlanma" (Quantum Teleportation) protokolünü, yazılım dünyasından gelenlerin anlayabileceği bir dille modellemek, simüle etmek ve öğretmek için tasarlanmış bir eğitim deposudur.
 
-Bu depo, maddeyi bir yerden bir yere fiziksel olarak göndermekle değil; bir parçacığın sahip olduğu **kuantum bilgisini (özünü)**, aradaki fiziksel mesafeyi yok sayarak başka bir parçacığa aktarmakla ilgilidir.
+---
+
+## 🏗 Repository Structure
+
+| Module | Description | Location |
+| :--- | :--- | :--- |
+| 📚 **Lessons** | Interactive Jupyter Notebooks for learning. | `dersler/` |
+| 🛠 **Source** | Core Qiskit implementation and helpers. | `kaynak/` |
+| 🖼 **Gallery** | Circuit diagrams and visualization results. | `gorseller/` |
+| 📖 **Guide** | Detailed setup and usage instructions. | [KULLANIM_REHBERI.md](KULLANIM_REHBERI.md) |
 
 ---
 
@@ -11,91 +21,53 @@ Bu depo, maddeyi bir yerden bir yere fiziksel olarak göndermekle değil; bir pa
 
 Popüler kültürdeki "ışınlanma" sahnelerinin aksine, kuantum ışınlanma verinin (qubit durumunun) transferidir. **No-Cloning (Kopyalanamazlık) Teoremi** gereği, bir kuantum durumu kopyalanamaz; ancak "aktarılabilir". Bu aktarım gerçekleştiğinde, orijinal kaynaktaki bilgi yok olur ve hedef noktada yeniden belirir.
 
-### Temel Kavramlar (Eğitim Modülleri)
-Bu repoda adım adım şu kavramları keşfedeceksiniz:
-1.  **Qubit (Kuantum Bit):** 0 ve 1'in ötesinde, süperpozisyon halindeki veri birimi.
+### Temel Kavramlar
+1.  **Qubit:** Süperpozisyon halindeki veri birimi.
 2.  **Süperpozisyon:** Bir qubitin aynı anda hem 0 hem 1 olma durumu.
-3.  **Dolanıklık (Entanglement):** Einstein'ın "uzaktan ürkütücü etkileşim" dediği, iki parçacığın mesafeden bağımsız olarak birbirine bağlanması.
-4.  **Bell Durumu:** Maksimum dolanıklığa sahip iki qubitlik sistem.
+3.  **Dolanıklık (Entanglement):** Parçacıkların mesafeden bağımsız birbirine bağlanması.
+4.  **Bell Ölçümü:** Bilgiyi Alice'den Bob'a aktarmak için kullanılan yöntem.
 
 ---
 
 ## 🛠 Teknik Mimari
 
-Proje, kuantum devrelerini simüle etmek için Python ve **Qiskit** (IBM Quantum SDK) kullanmaktadır. Yapı, bir kuantum ışınlanma protokolünün 4 ana aşamasını simüle eder:
+Proje, kuantum devrelerini simüle etmek için Python ve **Qiskit** (IBM Quantum SDK) kullanmaktadır. Protokol 4 ana aşamadan oluşur:
 
-1.  **Hazırlık (Preparation):** Işınlanacak olan "meçhul" kuantum durumunun oluşturulması.
-2.  **Dolanıklık Kanalı (EPR Pair):** Alice ve Bob arasında kuantum bir köprü kurulması.
-3.  **Bell Ölçümü:** Alice'in kendi qubitleri üzerinde yaptığı ölçümle bilgiyi "kodlaması".
-4.  **Klasik Aktarım ve Dönüşüm:** Ölçüm sonuçlarının (0 ve 1'ler) Bob'a iletilmesi ve Bob'un kendi qubitini bu sonuçlara göre düzelterek orijinal bilgiyi elde etmesi.
-
----
-
-## 📂 Dosya Yapısı
-
-```text
-Kuantum-Gecidi/
-├── dersler/
-│   ├── 01_Qubit_Nedir.ipynb         # Temel kuantum mantığı
-│   ├── 02_Dolaniklik_Olusturma.ipynb # Bell durumları
-│   └── 03_Isinlanma_Protokolu.ipynb # Tam protokol simülasyonu
-├── kaynak/
-│   ├── devre_tasarimci.py           # Qiskit devrelerini kuran yardımcı sınıf
-│   └── analiz_araclari.py           # Sonuçları görselleştiren araçlar
-├── gorseller/                       # Protokol şemaları ve devre çizimleri
-├── KULLANIM_REHBERI.md              # Adım adım kurulum ve çalıştırma
-└── README.md
-```
+1.  **Hazırlık:** Işınlanacak durumun oluşturulması.
+2.  **Dolanıklık Kanalı:** Alice ve Bob arasında EPR çifti kurulması.
+3.  **Bell Ölçümü:** Alice'in qubitler üzerinde ölçüm yapması.
+4.  **Düzeltme:** Bob'un ölçüm sonuçlarına göre qubitini güncellemesi.
 
 ---
 
 ## 🚀 Başlangıç
 
-Bu dünyaya adım atmak için yerel makinenizde Python yüklü olmalıdır.
-
 ### 1. Kütüphaneleri Kurun
 ```bash
-pip install qiskit qiskit-aer matplotlib
+pip install -r requirements.txt
 ```
 
 ### 2. İlk Işınlanma Devresini Çalıştırın
-`kaynak/isinlanma_test.py` dosyasını çalıştırarak bir qubitin durumunun nasıl başarıyla aktarıldığını histogram grafiğinde görebilirsiniz.
-
-```python
-# Örnek çıktı mantığı:
-# Girdi: |psi> = 0.6|0> + 0.8|1>
-# Çıktı: Bob'un ölçümü -> 0.6|0> + 0.8|1> (Başarı!)
+Terminal üzerinden testi başlatın:
+```bash
+python kaynak/isinlanma_test.py
 ```
-
----
-
-## 🧠 Neden Bu Repoyu İncelemelisiniz?
-
-* **Matematikten Koda:** Karmaşık lineer cebir denklemleri yerine, kapı mantığı (Hadamard, CNOT) ile kuantum dünyasını anlarsınız.
-* **Geleceğe Hazırlık:** Kuantum internet ve kuantum güvenli haberleşme protokollerinin temelini öğrenirsiniz.
-* **Açık Kaynak Kültürü:** Karmaşık akademik makaleler yerine, çalışan kod üzerinden deney yaparsınız.
 
 ---
 
 ## 🤝 Katkıda Bulunma
 
-Bu bir eğitim projesidir. Eğer daha iyi bir anlatım yönteminiz, yeni bir kuantum kapısı optimizasyonunuz veya daha açıklayıcı bir görseliniz varsa, lütfen `Pull Request` gönderin! 
-
-1. Bu depoyu çatallayın (Fork).
-2. Yeni bir özellik dalı açın (Feature branch).
-3. Değişikliklerinizi kaydedin (Commit).
-4. Dalı gönderin (Push) ve PR açın.
+Bu bir eğitim projesidir. Pull Request göndererek katkıda bulunabilirsiniz!
+1. Depoyu çatallayın.
+2. Feature branch açın.
+3. Değişikliklerinizi kaydedin ve PR açın.
 
 ---
 
 ## 📜 Lisans
 
-Bu proje MIT Lisansı ile korunmaktadır. Eğitim amaçlı her türlü kullanım serbesttir.
+Bu proje MIT Lisansı ile korunmaktadır.
 
 ---
 
-*“Eğer kuantum mekaniği kafanızı karıştırmadıysa, onu henüz anlamamışsınız demektir.”* – **Niels Bohr**
-
----
-
-**[Yunus Çetin - 2026]** | [GitHub](https://github.com/arch-yunus) | [Medium](https://medium.com/)
+**[Yunus Çetin - 2026]** | [GitHub](https://github.com/arch-yunus)
