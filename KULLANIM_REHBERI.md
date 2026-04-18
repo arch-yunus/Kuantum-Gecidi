@@ -28,7 +28,7 @@ Terminal üzerinden hızlı bir test için:
 python kaynak/isinlanma_test.py
 ```
 
-Bu işlem `gorseller/isinlanma_devresi.png` dosyasını oluşturacaktır.
+Bu işlem `gorseller/isinlanma_tam_devre.png` dosyasını oluşturacak ve Alice ile Bob arasındaki kuantum sadakat (fidelity) oranını terminale yazdıracaktır.
 
 ## 🔍 4. Mimari
 *   `kaynak/devre_tasarimci.py`: Protokol mantığı.
