@@ -47,8 +47,10 @@ class DevreTasarimci:
         """
         Alice'in ölçüm sonuçlarına göre Bob'un qubitine düzeltme kapıları ekler.
         """
-        qc.x(q_bob).c_if(crx, 1) # crx == 1 ise X uygula
-        qc.z(q_bob).c_if(crz, 1) # crz == 1 ise Z uygula
+        with qc.if_test((crx, 1)):
+            qc.x(q_bob)
+        with qc.if_test((crz, 1)):
+            qc.z(q_bob)
         return qc
 
     @staticmethod

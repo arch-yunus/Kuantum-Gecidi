@@ -10,7 +10,7 @@ from kaynak.devre_tasarimci import DevreTasarimci
 from kaynak.analiz_araclari import AnalizAraclari
 
 def main():
-    print("🌌 Kuantum-Geçidi: Işınlanma Testi Başlatılıyor...")
+    print("Kuantum-Gecidi: Isinlanma Testi Baslatiliyor...")
     
     # 1. Devre Kurulumu
     tasarimci = DevreTasarimci()
@@ -34,28 +34,20 @@ def main():
     tasarimci.bob_duzeltmeleri(qc, qr[2], crz, crx)
     
     # 7. Simülasyon
-    print("🚀 Devre simüle ediliyor...")
-    # Not: Bob'un qubitini ölçmek için sona bir ölçüm ekleyebiliriz 
-    # veya durumu doğrudan statevector ile kontrol edebiliriz.
-    # Burada sadece devreyi görselleştirelim ve çalıştıralım.
-    
-    backend = Aer.get_backend('qasm_simulator')
-    # Bob'un sonucunu görmek için bir ölçüm daha ekleyelim (opsiyonel)
-    # qc.measure_all() # Bu tüm devreyi bozar, son q2'yi ölçmeliyiz
+    print("Basari: Protokol kuruldu.")
     
     # Devreyi kaydet
     gorsel_klasor = "gorseller"
     if not os.path.exists(gorsel_klasor):
         os.makedirs(gorsel_klasor)
     
-    # AnalizAraclari.devre_kaydet(qc, os.path.join(gorsel_klasor, "isinlanma_devresi.png"))
+    AnalizAraclari.devre_kaydet(qc, os.path.join(gorsel_klasor, "isinlanma_devresi.png"))
     
-    print("\n✅ Protokol başarıyla kuruldu.")
-    tasarimci_info = f"Hazırlanan Durum: Theta={theta:.2f}, Phi={phi:.2f}"
+    tasarimci_info = f"Hazirlanan Durum: Theta={theta:.2f}, Phi={phi:.2f}"
     print(tasarimci_info)
     
-    print("\nDevre Özeti:")
-    print(qc.draw(output='text'))
+    print("\nDevre Ozeti: Devre semasi gorseller/ klasörüne kaydedildi.")
+    # print(qc.draw(output='text')) # Windows encoding sorunu nedeniyle devre dışı
 
 if __name__ == "__main__":
     main()

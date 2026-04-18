@@ -39,7 +39,7 @@ class AnalizAraclari:
         Hazırlanan durum ve ölçüm sonuçları hakkında bilgi yazdırır.
         """
         print("-" * 30)
-        print("📊 ANALİZ ÖZETİ")
+        print("ANALIZ OZETI")
         print("-" * 30)
         print(f"Hazırlanan Durum Açısı (Theta): {theta:.4f} rad")
         print(f"Hazırlanan Faz Açısı (Phi): {phi:.4f} rad")
