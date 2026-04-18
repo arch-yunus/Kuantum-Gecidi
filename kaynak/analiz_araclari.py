@@ -71,13 +71,13 @@ class AnalizAraclari:
         Hazırlanan durum ve sadakat sonucu hakkında bilgi yazdırır.
         """
         print("-" * 40)
-        print("🚀 KUANTUM ISINLANMA ANALIZ OZETI")
+        print("KUANTUM ISINLANMA ANALIZ OZETI")
         print("-" * 40)
-        print(f"🔹 Hazırlanan Durum: Theta={theta:.4f}, Phi={phi:.4f}")
-        print(f"🔹 Işınlanma Sadakati (Fidelity): {fidelity:.4f}")
+        print(f"Hazırlanan Durum: Theta={theta:.4f}, Phi={phi:.4f}")
+        print(f"Işınlanma Sadakati (Fidelity): {fidelity:.4f}")
         
         if fidelity > 0.99:
-            print("✅ BAŞARILI: Kuantum bilgisi mükemmel aktarıldı!")
+            print("BAŞARILI: Kuantum bilgisi mükemmel aktarıldı!")
         else:
-            print("⚠️ UYARI: Sadakat düşük. Devreyi kontrol edin.")
+            print("UYARI: Sadakat düşük. Devreyi kontrol edin.")
         print("-" * 40)

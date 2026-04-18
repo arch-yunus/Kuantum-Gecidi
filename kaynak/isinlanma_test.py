@@ -14,7 +14,7 @@ from kaynak.analiz_araclari import AnalizAraclari
 def run_teleportation_test():
     console_width = 50
     print("=" * console_width)
-    print("🌌 KUANTUM-GECIDI: ISINLANMA PROTOKOLU TESTI".center(console_width))
+    print("KUANTUM-GECIDI: ISINLANMA PROTOKOLU TESTI".center(console_width))
     print("=" * console_width)
     
     # 1. Hazırlık
@@ -71,7 +71,7 @@ def run_teleportation_test():
     if not os.path.exists("gorseller"):
         os.makedirs("gorseller")
         
-    AnalizAraclari.devre_kaydet(qc, "gorseller/isinlanma_tam_devre.png")
+    AnalizAraclari.devre_kaydet(qc, "gorseller/isinlanma_devresi.png")
     AnalizAraclari.sonuc_ozeti(theta, phi, fidelity)
     
     print("\n[i] Detaylı analiz görseller/ klasörüne kaydedildi.")
