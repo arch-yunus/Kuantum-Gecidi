@@ -1,0 +1,12 @@
+# Kuantum-Gecidi Dependencies
+
+# Core Quantum Framework
+qiskit==1.0.1
+qiskit-aer==0.13.3
+
+# Visualization & Graphics
+matplotlib==3.8.3
+pylatexenc==2.10
+
+# Scientific Computing
+numpy==1.26.4
