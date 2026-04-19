@@ -16,8 +16,8 @@
 
 | Module | Description | Location |
 | :--- | :--- | :--- |
-| 📚 **Lessons** | Interactive Jupyter Notebooks (01-04). | `dersler/` |
-| 🛠 **Source** | Core logic, fidelity analysis and **Gate Teleportation**. | `kaynak/` |
+| 📚 **Lessons** | Interactive Jupyter Notebooks (01-05). | `dersler/` |
+| 🛠 **Source** | Core logic, **Gate Teleportation** and **Noise Analysis**. | `kaynak/` |
 | 🖼 **Gallery** | Circuit diagrams and visualization results. | `gorseller/` |
 | 📖 **Guide** | Detailed setup and usage instructions. | [KULLANIM_REHBERI.md](KULLANIM_REHBERI.md) |
 
@@ -151,12 +151,17 @@ graph LR
 
 ---
 
-## 🧪 Gerçek Dünya Kısıtlamaları
+## 🧪 Gerçek Dünya Kısıtlamaları: NISQ Çağı
 
-Laboratuvar ortamının dışına çıktığımızda kuantum dünyası oldukça zorlu hale gelir:
+Laboratuvar ortamının dışına çıktığımızda kuantum dünyası oldukça zorlu hale gelir. Modern kuantum bilgisayarlar **NISQ** (Noisy Intermediate-Scale Quantum) olarak adlandırılır:
 
 1.  **Decoherence (Yitirim):** Qubitlerin çevresiyle etkileşime girip kuantum özelliklerini kaybetmesi (T1 ve T2 süreleri).
-2.  **Gate Fidelity (Kapı Sadakati):** Kullanılan kuantum kapılarının (H, CNOT) %100 kusursuz olmaması.
+2.  **Gate Fidelity (Kapı Sadakati):** Kullanılan kuantum kapılarının (H, CNOT) %100 kusursuz olmaması. Projemizde yer alan `gurultu_analizi.py` aracıyla bu hataların sadakat üzerindeki etkisini aşağıdaki grafik üzerinden görebilirsiniz:
+
+| Sadakat Kaybı (Noise) |
+| :---: |
+| ![Noise Analysis](gorseller/gurultu_analizi.png) |
+
 3.  **Haberleşme Gecikmesi:** Bob'un Alice'den gelecek klasik biti bekleme zorunluluğu, hızı klasik limitlere çeker.
 
 ---

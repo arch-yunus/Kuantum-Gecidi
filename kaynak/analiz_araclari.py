@@ -29,21 +29,18 @@ class AnalizAraclari:
     @staticmethod
     def qubit_durumu_cikar(full_state, qubit_index):
         """
-        Çoklu qubit sisteminden belirli bir qubitin yoğunluk matrisini çıkarır.
+        Coklu qubit sisteminden tek bir qubitin durumunu cikarir.
         """
-        from qiskit.quantum_info import partial_trace
+        from qiskit.quantum_info import partial_trace, DensityMatrix, Statevector
         
-        if not isinstance(full_state, Statevector):
+        if isinstance(full_state, (DensityMatrix, Statevector)):
+            pass
+        else:
             full_state = Statevector(full_state)
             
-        # İlgili qubit dışındaki tüm qubitleri trace et
-        n_qubits = full_state.num_qubits
-        other_qubits = [i for i in range(n_qubits) if i != qubit_index]
-        reduced_density_matrix = partial_trace(full_state, other_qubits)
-        
-        return reduced_density_matrix
-
-    @staticmethod
+        # Hedef qubit haricindeki tum qubitler uzerinden trace al
+        q_indices = [i for i in range(full_state.num_qubits) if i != qubit_index]
+        return partial_trace(full_state, q_indices)
     def karsilastirmali_bloch_ciz(state1, state2, baslik1="Girdi", baslik2="Çıktı"):
         """
         İki kuantum durumunu ayrı ayrı Bloch küresinde kaydeder.
