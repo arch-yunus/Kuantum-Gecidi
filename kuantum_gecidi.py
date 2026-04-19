@@ -24,6 +24,7 @@ def main_menu():
         print("3) Gurultu ve Hata Analizi (NISQ Sim")
         print("4) Dolaniklik Takasi (Entanglement Swapping)")
         print("5) Proje Dokumantasyonunu Goruntule (README)")
+        print("6) 🔮 Kuantum Kahini'ne Danis (Belirsizligin Sesini Duy)")
         print("q) Cikis")
         print("-" * 40)
         
@@ -52,6 +53,10 @@ def main_menu():
         elif choice == '5':
             with open("README.md", "r", encoding="utf-8") as f:
                 print(f.read()[:1000] + "...") # Preview
+            input("\nDevam etmek icin Enter'a basin...")
+        elif choice == '6':
+            from kaynak.kuantum_kahini import kehaneti_baslat
+            kehaneti_baslat()
             input("\nDevam etmek icin Enter'a basin...")
         elif choice == 'q':
             print("\nKuantum gecidinden cikiliyor. Iyi yolculuklar! 🚀")
