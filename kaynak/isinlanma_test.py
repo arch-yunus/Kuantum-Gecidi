@@ -1,8 +1,9 @@
 import os
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 from qiskit import transpile
-from qiskit_aer import Aer
+from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector
 
 # Proje kök dizinini ekle
@@ -22,17 +23,18 @@ def run_teleportation_test():
     qc, qr, crz, crx = tasarimci.isinlanma_devresi_hazirla()
     
     # Işınlanacak başlangıç durumunu (psi) belirle
-    # Örnek: Adım adım bir durum hazırlayalım
     theta = 1.25  # rad
     phi = 0.8     # rad
     tasarimci.durum_hazirla(qc, qr[0], theta, phi)
     
-    # Başlangıç durumunu Statevector olarak kaydet (Verifikasyon için)
-    # Sadece ilk qubitin durumunu alıyoruz
-    temp_qc = qc.copy()
-    temp_qc.remove_final_measurements(inplace=True)
-    initial_psi = Statevector.from_instruction(temp_qc)
-    # Not: Bu statevector 3 qubitliktir, ancak Alice'in elindeki q0 durumunu temsil eder.
+    # Başlangıç durumunu simülasyon öncesi kaydet (Ideal q0 durumu)
+    # Sadece ilk qubitin beklenen durumunu oluşturuyoruz
+    expected_psi = Statevector.from_label('0').evolve(
+        AnalizAraclari.qubit_durumu_cikar(Statevector.from_instruction(qc), 0)
+    )
+    # Daha basitçe:
+    expected_psi = Statevector.from_instruction(qc)
+    expected_psi = AnalizAraclari.qubit_durumu_cikar(expected_psi, 0)
     
     # 2. Protokol Adımları
     tasarimci.dolaniklik_olustur(qc, qr[1], qr[2])
@@ -42,39 +44,47 @@ def run_teleportation_test():
     qc.measure(qr[0], crz)
     qc.measure(qr[1], crx)
     
-    # Bob'un düzeltmeleri (Alice'in ölçümlerine bağlı)
+    # Bob'un düzeltmeleri
     tasarimci.bob_duzeltmeleri(qc, qr[2], crz, crx)
     
     print("[+] Protokol devresi başarıyla oluşturuldu.")
     
-    # 3. Simülasyon
-    from qiskit_aer import AerSimulator
-    backend = AerSimulator()
+    # 3. Simülasyon (Statevector bazlı doğrulama için)
+    # Not: Dinamik devrelerde statevector takibi için backend ayarları önemlidir
+    backend = AerSimulator(method='statevector')
     
-    # Devreyi transpile etmeden doğrudan koşturmayı deneyelim (Aer destekler)
-    # Veya basis_gates belirterek transpile edelim
-    job = backend.run(transpile(qc, backend))
-    result = job.result()
-    counts = result.get_counts()
+    # Devreyi koştur (Ölçümler olsa bile statevector simülatörü son durumu verir)
+    # Ancak ölçümler Bob'a bilgi verir. Bob'un qubiti (q2) hedef durumunda olmalıdır.
+    qc.save_statevector()
+    t_qc = transpile(qc, backend)
+    result = backend.run(t_qc).result()
+    final_statevector = result.get_statevector()
+    
+    # Bob'un qubitinin (q2) durumunu çıkar (Partial Trace)
+    # Qiskit'te qubit sırası q2, q1, q0 şeklindedir (Little-endian)
+    bob_final_state = AnalizAraclari.qubit_durumu_cikar(final_statevector, 2)
     
     print("[+] Simülasyon tamamlandı.")
     
-    # 4. Doğrulama (Basitleştirilmiş: Ölçüm sonuçları üzerinden)
-    # Not: Tam bir kuantum doğrulaması için statevector takibi gerekir 
-    # ancak dinamik devrelerde terminal üzerinde histogram en güvenilir yoldur.
+    # 4. Sadakat (Fidelity) Hesaplama
+    fidelity = AnalizAraclari.sadakat_hesapla(expected_psi, bob_final_state)
     
-    # Sadakat (Fidelity) yerine burada örnekleme başarısını gösterelim
-    # (Gerçek bir implementasyonda bu kısım daha karmaşık olabilir)
-    fidelity = 1.0  # Simülasyonda varsayılan olarak başarılı kabul ediyoruz
-    
-    # 4. Görselleştirme ve Raporlama
+    # 5. Görselleştirme ve Raporlama
     if not os.path.exists("gorseller"):
         os.makedirs("gorseller")
         
+    # Devre şemasını kaydet
     AnalizAraclari.devre_kaydet(qc, "gorseller/isinlanma_devresi.png")
-    AnalizAraclari.sonuc_ozeti(theta, phi, fidelity)
     
-    print("\n[i] Detaylı analiz görseller/ klasörüne kaydedildi.")
+    # Bloch küresi karşılaştırmasını kaydet
+    AnalizAraclari.karsilastirmali_bloch_ciz(
+        expected_psi, bob_final_state, 
+        baslik1="Girdi (Alice)", baslik2="Çıktı (Bob)"
+    )
+    
+    AnalizAraclari.sonuc_ozeti(theta, phi, fidelity.real)
+    
+    print(f"[i] Çizimler 'gorseller/' klasörüne kaydedildi.")
     print("=" * console_width)
 
 if __name__ == "__main__":

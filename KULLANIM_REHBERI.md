@@ -1,35 +1,52 @@
-# 📖 Kuantum-Geçidi: Kullanım Rehberi
+# 📖 Kuantum-Geçidi Kullanım Rehberi
 
-Bu rehber, projenin yerel makinenizde nasıl kurulacağını ve çalıştırılacağını adım adım açıklar.
+Bu rehber, projenin kurulumu, yapısı ve kullanımı hakkında detaylı bilgi sağlamaktadır.
 
-## 🛠 1. Kurulum
+## 🚀 Hızlı Başlangıç
 
-Sisteminizde Python 3.8+ yüklü olduğundan emin olun. Bağımlılıkları kurmak için:
+### 1. Gereksinimler
+Proje Python 3.9+ ve Qiskit 1.0+ ekosistemini kullanmaktadır. Gerekli kütüphaneleri şu komutla kurabilirsiniz:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### ❗ Troubleshooting (Olası Sorunlar)
-*   **Grafik Hatası:** Eğer devre çizimleri (`mpl` output) hata veriyorsa, `pylatexenc` kütüphanesinin yüklü olduğundan emin olun.
-*   **Aero Simulator:** Qiskit Aer bazen C++ derleyicisi gerektirebilir. Hata alırsanız `qiskit-aer` yerine `qiskit-aer-gpu` (uygun donanım varsa) deneyebilir veya sanal ortamınızı (venv) kontrol edebilirsiniz.
+### 2. İlk Testin Çalıştırılması
+Terminal üzerinden kuantum ışınlanma protokolünün doğruluğunu test etmek için:
 
-## 📚 2. Eğitim İçerikleri
-
-Dersler Jupyter Notebook formatındadır:
-1.  **[01_Qubit_Nedir.ipynb](dersler/01_Qubit_Nedir.ipynb):** Temeller.
-2.  **[02_Dolaniklik_Olusturma.ipynb](dersler/02_Dolaniklik_Olusturma.ipynb):** Bell durumları.
-3.  **[03_Isinlanma_Protokolu.ipynb](dersler/03_Isinlanma_Protokolu.ipynb):** Tam simülasyon.
-
-## 🚀 3. Test Simülasyonu
-
-Terminal üzerinden hızlı bir test için:
 ```bash
 python kaynak/isinlanma_test.py
 ```
 
-Bu işlem `gorseller/isinlanma_tam_devre.png` dosyasını oluşturacak ve Alice ile Bob arasındaki kuantum sadakat (fidelity) oranını terminale yazdıracaktır.
+Bu komut şunları yapar:
+*   Rastgele veya belirlenmiş bir kuantum durumu hazırlar.
+*   Işınlanma devresini kurar ve simüle eder.
+*   **Fidelity (Sadakat)** hesaplayarak veri iletim başarısını raporlar.
+*   Görsel çıktıları `gorseller/` klasörüne kaydeder.
 
-## 🔍 4. Mimari
-*   `kaynak/devre_tasarimci.py`: Protokol mantığı.
-*   `kaynak/analiz_araclari.py`: Görselleştirme katmanı.
+---
+
+## 🏗 Proje Yapısı
+
+### `kaynak/` (Kaynak Kod)
+*   **`devre_tasarimci.py`**: Kuantum devrelerinin atomik parçalarını (dolanıklık, hazırlık, düzeltme) oluşturur.
+*   **`analiz_araclari.py`**: Bloch küresi karşılaştırması ve sadakat hesaplama gibi analiz araçlarını içerir.
+*   **`isinlanma_test.py`**: Tüm süreci başlatan ve doğrulayan ana script.
+
+### `dersler/` (Eğitim Materyalleri)
+01'den 03'e kadar olan Jupyter Notebook dosyaları, kuantum mekaniği bilmeyen birinin temelden başlayarak ışınlanma protokolünü anlamasını sağlamak için tasarlanmıştır.
+
+---
+
+## 📊 Sonuçları Anlamak
+
+Çalıştırma sonrası `gorseller/` klasöründe şu dosyaları göreceksiniz:
+1.  **`isinlanma_devresi.png`**: Protokolün Qiskit üzerindeki devre şeması.
+2.  **`bloch_karsilastirma.png`**: Alice'in gönderdiği durum ile Bob'un aldığı durumun Bloch küresi üzerindeki yan yana görseli.
+
+---
+
+## 🛠 Sorun Giderme
+
+*   **Çizim Hatası:** Eğer `matplotlib` veya `pylatexenc` yüklü değilse devre şemaları görsel yerine metin (ASCII) olarak kaydedilir.
+*   **Sürüm Uyumluluğu:** `qiskit>=1.0.0` kullandığınızdan emin olun.
