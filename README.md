@@ -104,7 +104,14 @@ Bu proje, karmaşık kuantum süreçlerini anlamayı kolaylaştırmak için otom
 pip install -r requirements.txt
 ```
 
-### 2. İlk Işınlanma Devresini Çalıştırın
+### 2. İnteraktif Paneli Başlatın
+Tüm simülasyonları tek bir merkezden yönetmek için interaktif paneli kullanabilirsiniz:
+```bash
+python kuantum_gecidi.py
+```
+
+### 3. Manuel Testler
+İsterseniz modülleri tek tek de çalıştırabilirsiniz:
 ```bash
 python kaynak/isinlanma_test.py
 ```
