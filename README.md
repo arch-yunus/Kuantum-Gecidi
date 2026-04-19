@@ -1,8 +1,14 @@
 # 🌌 Kuantum-Geçidi: Kuantum Işınlanma Rehberi
 
-![Kuantum Geçidi Banner](assets/banner.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Qiskit: 1.0+](https://img.shields.io/badge/Qiskit-1.0+-orange.svg)](https://qiskit.org/)
+[![Build: Success](https://img.shields.io/badge/Build-Success-brightgreen.svg)]()
 
-**Kuantum-Geçidi**, kuantum mekaniğinin en büyüleyici fenomenlerinden biri olan "Kuantum Işınlanma" (Quantum Teleportation) protokolünü, yazılım dünyasından gelenlerin anlayabileceği bir dille modellemek, simüle etmek ve öğretmek için tasarlanmış bir eğitim deposudur.
+**Kuantum-Geçidi**, kuantum mekaniğinin en büyüleyici fenomenlerinden biri olan **Kuantum Işınlanma** (Quantum Teleportation) protokolünü modern yazılım perspektifiyle modelleyen, simüle eden ve öğreten kapsamlı bir eğitim platformudur.
+
+> [!NOTE]
+> Bu depo, "ışınlanma" kavramını bilim kurgudan çıkarıp, kuantum bilgi kuramı çerçevesinde somut bir algoritma olarak ele alır.
 
 ---
 
@@ -19,24 +25,42 @@
 
 ## 🧐 Nedir Bu Kuantum Işınlanma?
 
-Popüler kültürdeki "ışınlanma" sahnelerinin aksine, kuantum ışınlanma verinin (qubit durumunun) transferidir. **No-Cloning (Kopyalanamazlık) Teoremi** gereği, bir kuantum durumu kopyalanamaz; ancak "aktarılabilir". Bu aktarım gerçekleştiğinde, orijinal kaynaktaki bilgi yok olur ve hedef noktada yeniden belirir.
+Kuantum ışınlanma, bir parçacığın üzerindeki kuantum bilgisinin (durumunun), parçacığın kendisi hareket etmeden, dolanıklık ve klasik iletişim kullanılarak başka bir parçacığa aktarılmasıdır.
 
-### Temel Kavramlar
-1.  **Qubit:** Süperpozisyon halindeki veri birimi.
-2.  **Süperpozisyon:** Bir qubitin aynı anda hem 0 hem 1 olma durumu.
-3.  **Dolanıklık (Entanglement):** Parçacıkların mesafeden bağımsız birbirine bağlanması.
-4.  **Bell Ölçümü:** Bilgiyi Alice'den Bob'a aktarmak için kullanılan yöntem.
+### Temel Sütunlar
+1.  **No-Cloning (Kopyalanamazlık):** Bir kuantum durumu kopyalanamaz; veri aktarıldığında orijinal kaynaktaki bilgi yok olur.
+2.  **Süperpozisyon:** Verinin aynı anda hem 0 hem 1 olasılığını taşıma yeteneği.
+3.  **Dolanıklık (Entanglement):** Einstein'ın "uzaktan ürkütücü etkileşim" dediği, parçacıkların kader birliği.
 
 ---
 
-## 🛠 Teknik Mimari
+## 🧪 Teknik Derin Bakış
 
-Proje, kuantum devrelerini simüle etmek için Python ve **Qiskit** (IBM Quantum SDK) kullanmaktadır. Protokol 4 ana aşamadan oluşur:
+### Protokolün Matematiği
 
-1.  **Hazırlık:** Işınlanacak durumun oluşturulması.
-2.  **Dolanıklık Kanalı:** Alice ve Bob arasında EPR çifti kurulması.
-3.  **Bell Ölçümü:** Alice'in qubitler üzerinde ölçüm yapması.
-4.  **Düzeltme:** Bob'un ölçüm sonuçlarına göre qubitini güncellemesi.
+Alice, elindeki bilinmeyen $| \psi \rangle$ durumunu Bob'a göndermek ister:
+
+$$| \psi \rangle = \alpha | 0 \rangle + \beta | 1 \rangle$$
+
+Süreç şu adımları izler:
+
+1.  **Dolanıklık Hazırlığı:** Alice ve Bob bir Bell çifti paylaşır: $| \Phi^+ \rangle = \frac{1}{\sqrt{2}} (| 00 \rangle + | 11 \rangle)$.
+2.  **Alice'in Etkileşimi:** Alice kendi qubitlerini birbirine bağlar ve Bell ölçümüne hazırlar.
+3.  **Ölçüm Çöküşü:** Alice ölçüm yaptığında, Bob'un elindeki qubit Alice'in sonucuna göre 4 olası durumdan birine girer.
+4.  **Klasik Düzeltme:** Bob, Alice'den gelen 2 klasik biti kullanarak kendi qubitine $X$ ve/veya $Z$ kapıları uygular ve orijinal $| \psi \rangle$ durumunu %100 sadakatle (fidelity) elde eder.
+
+---
+
+## 🖼 Görsel Galeri (Showcase)
+
+Bu proje, karmaşık kuantum süreçlerini anlamayı kolaylaştırmak için otomatik görselleştirmeler üretir:
+
+| Devre Şeması | Girdi Durumu (Alice) | Çıktı Durumu (Bob) |
+| :---: | :---: | :---: |
+| ![Circuit](gorseller/isinlanma_devresi.png) | ![Girdi](gorseller/bloch_girdi.png) | ![Çıktı](gorseller/bloch_cikti.png) |
+
+> [!TIP]
+> `kaynak/isinlanma_test.py` dosyasını çalıştırarak kendi görsel çıktılarınızı anında üretebilirsiniz.
 
 ---
 
@@ -48,25 +72,35 @@ pip install -r requirements.txt
 ```
 
 ### 2. İlk Işınlanma Devresini Çalıştırın
-Terminal üzerinden testi başlatın:
 ```bash
 python kaynak/isinlanma_test.py
 ```
 
 ---
 
-## 🤝 Katkıda Bulunma
+## 🗺 Yol Haritası (Roadmap)
 
-Bu bir eğitim projesidir. Pull Request göndererek katkıda bulunabilirsiniz!
-1. Depoyu çatallayın.
-2. Feature branch açın.
-3. Değişikliklerinizi kaydedin ve PR açın.
+- [x] Temel Işınlanma Protokolü (Qiskit 1.0+)
+- [x] Fidelity (Sadakat) Analiz Aracı
+- [ ] **Gürültü Modelleri:** Gerçek kuantum cihazlarındaki (decoherence) hataların simülasyonu.
+- [ ] **Kuantum Tekrarlayıcılar:** Uzun mesafe kuantum ağları için modelleme.
+- [ ] **Multi-Qubit Teleportasyon:** Birden fazla qubitin aynı anda aktarımı.
 
 ---
 
-## 📜 Lisans
+## 📜 Kaynakça & Teşekkür
 
-Bu proje MIT Lisansı ile korunmaktadır.
+1.  **Bennett, C. H. et al.** (1993). "Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels". [Physical Review Letters].
+2.  **Qiskit Documentation** - [docs.quantum.ibm.com](https://docs.quantum.ibm.com/)
+
+---
+
+## 🤝 Katkıda Bulunma
+
+Bu bir eğitim projesidir ve her türlü katkıya açıktır!
+1. Depoyu çatallayın (Fork).
+2. Yeni bir özellik dalı (Feature Branch) açın.
+3. Değişikliklerinizi kaydedin ve bir Pull Request oluşturun.
 
 ---
 
