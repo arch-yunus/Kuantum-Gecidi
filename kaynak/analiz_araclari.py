@@ -1,3 +1,6 @@
+# Kuantum-Gecidi Projesi
+# Gelistirici: Bahattin Yunus Cetin | IT Architect
+
 import matplotlib.pyplot as plt
 import numpy as np
 from qiskit.visualization import plot_histogram, plot_bloch_multivector

@@ -224,4 +224,20 @@ Bu bir eğitim projesidir ve her türlü katkıya açıktır!
 
 ---
 
-**[Yunus Çetin - 2026]** | [GitHub](https://github.com/arch-yunus)
+## 👨‍💻 İletişim ve Geliştirici
+
+Bu proje, kuantum bilişim teknolojilerinin yaygınlaştırılması ve eğitim materyallerinin geliştirilmesi amacıyla hazırlanmıştır. Teknik sorularınız veya iş birliği talepleriniz için aşağıdaki kanallardan ulaşabilirsiniz:
+
+**Bahattin Yunus Çetin**  
+*IT Architect*
+
+| Platform | Link |
+| :--- | :--- |
+| **GitHub** | [github.com/arch-yunus](https://github.com/arch-yunus) |
+| **LinkedIn** | [linkedin.com/in/bahattinyunus](https://www.linkedin.com/in/bahattinyunus/) |
+
+---
+
+<p align="center">
+  © 2026 - Kuantum-Geçidi Projesi
+</p>

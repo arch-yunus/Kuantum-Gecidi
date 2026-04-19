@@ -50,3 +50,12 @@ Bu komut şunları yapar:
 
 *   **Çizim Hatası:** Eğer `matplotlib` veya `pylatexenc` yüklü değilse devre şemaları görsel yerine metin (ASCII) olarak kaydedilir.
 *   **Sürüm Uyumluluğu:** `qiskit>=1.0.0` kullandığınızdan emin olun.
+
+---
+
+### 👨‍💻 Geliştirici Hakkında
+
+Bu proje **Bahattin Yunus Çetin** (IT Architect) tarafından kuantum hesaplama pratiklerini akademik ve endüstriyel standartlarda sunmak amacıyla geliştirilmiştir.
+
+*   **GitHub:** [github.com/arch-yunus](https://github.com/arch-yunus)
+*   **LinkedIn:** [linkedin.com/in/bahattinyunus](https://www.linkedin.com/in/bahattinyunus/)

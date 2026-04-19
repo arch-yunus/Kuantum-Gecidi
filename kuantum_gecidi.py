@@ -8,6 +8,8 @@ def print_banner():
     print("""
     ============================================================
     🌌  KUANTUM-GECIDI: INTERAKTIF SIMULASYON MERKEZI  🌌
+    ------------------------------------------------------------
+    Gelistirici: Bahattin Yunus Cetin | IT Architect
     ============================================================
     """)
 

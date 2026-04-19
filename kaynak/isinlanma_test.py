@@ -1,3 +1,6 @@
+# Kuantum-Gecidi Projesi
+# Gelistirici: Bahattin Yunus Cetin | IT Architect
+
 import os
 import sys
 import numpy as np
