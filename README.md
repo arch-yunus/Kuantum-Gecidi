@@ -88,6 +88,56 @@ python kaynak/isinlanma_test.py
 
 ---
 
+## 🚀 Geleceğin Kuantum İnterneti
+
+Kuantum ışınlanma, sadece tek bir qubiti aktarmakla kalmaz; küresel ölçekte bir **Kuantum İnterneti** kurmanın temel taşıdır.
+
+### Kuantum Tekrarlayıcılar (Repeaters)
+Fiziksel fiber optik kablolarda kuantum bilgisi (fotonlar) mesafe arttıkça kaybolur. Klasik yükselticiler (amplifiers) kuantum bilgisini kopyalayamadığı için (No-Cloning), bu sorunu **Dolanıklık Takası** (Entanglement Swapping) ile aşarız.
+
+```mermaid
+graph LR
+    A[Alice] ---|Dolanik 1| R[Repeater]
+    R ---|Dolanik 2| B[Bob]
+    R -->|Bell Ölçümü| R
+    A -.->|Işınlanmış Bağ| B
+```
+
+*   **Dolanıklık Takası:** İki kısa mesafeli dolanıklık bağı, bir ara düğümde (Repeater) yapılan ölçümle birbirine bağlanır. Bu işlem, Alice ve Bob'un fiziksel olarak hiç karşılaşmadan dolanık hale gelmesini sağlar.
+
+---
+
+## 🛡️ Güvenlik ve Protokol Karşılaştırması
+
+| Özellik | Kuantum Işınlanma | Kuantum Anahtar Dağıtımı (QKD) |
+| :--- | :--- | :--- |
+| **Amaç** | Kuantum verisini (qubit) aktarmak. | Güvenli şifreleme anahtarı üretmek. |
+| **Yöntem** | Dolanıklık + Klasik Kanal. | Tek foton gönderimi veya Dolanıklık. |
+| **Güvenlik** | No-Cloning + Dolanıklık Kontrolü. | Ölçümle bozulan durumların tespiti. |
+| **Uygulama** | Kuantum Ağları & Hesaplama. | Siber Güvenlik & Bankacılık. |
+
+---
+
+## 🧪 Gerçek Dünya Kısıtlamaları
+
+Laboratuvar ortamının dışına çıktığımızda kuantum dünyası oldukça zorlu hale gelir:
+
+1.  **Decoherence (Yitirim):** Qubitlerin çevresiyle etkileşime girip kuantum özelliklerini kaybetmesi (T1 ve T2 süreleri).
+2.  **Gate Fidelity (Kapı Sadakati):** Kullanılan kuantum kapılarının (H, CNOT) %100 kusursuz olmaması.
+3.  **Haberleşme Gecikmesi:** Bob'un Alice'den gelecek klasik biti bekleme zorunluluğu, hızı klasik limitlere çeker.
+
+---
+
+## ❓ Sıkça Sorulan Sorular (SSS)
+
+**S: Bu protokol ile ışıktan hızlı iletişim kurulabilir mi?**  
+**C:** Hayır. Bob, Alice'den gelen klasik anahtarı (telefon veya fiber hattı üzerinden) almadan qubitini çözemez. Bu durum **No-Communication Theorem** ile korunur.
+
+**S: Bir insanı ışınlayabilir miyiz?**  
+**C:** Teorik olarak atomik seviyedeki tüm kuantum bilgisini ışınlamak gerekirdi. Ancak bir insanın içerdiği devasa bilgi miktarı ve bu bilginin dolanıklığını koruma zorluğu, bunu günümüz ve öngörülebilir gelecek teknolojisi için imkansız kılar.
+
+---
+
 ## 📜 Tarihçe ve Kilometre Taşları
 
 Kuantum ışınlanma, teorik bir öngörüden küresel ölçekte deneylere uzanan büyük bir yolculuktur:
