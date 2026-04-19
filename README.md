@@ -1,5 +1,9 @@
 # 🌌 Kuantum-Geçidi: Kuantum Işınlanma Rehberi
 
+<p align="center">
+  <img src="assets/banner.png" alt="Kuantum Geçidi Banner" width="100%">
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 [![Qiskit: 1.0+](https://img.shields.io/badge/Qiskit-1.0+-orange.svg)](https://qiskit.org/)
