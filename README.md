@@ -17,7 +17,7 @@
 | Module | Description | Location |
 | :--- | :--- | :--- |
 | 📚 **Lessons** | Interactive Jupyter Notebooks (01-05). | `dersler/` |
-| 🛠 **Source** | Core logic, **Gate Teleportation** and **Noise Analysis**. | `kaynak/` |
+| 🛠 **Source** | Core logic, **Gate Teleportation**, **Noise Analysis** and **Entanglement Swapping**. | `kaynak/` |
 | 🖼 **Gallery** | Circuit diagrams and visualization results. | `gorseller/` |
 | 📖 **Guide** | Detailed setup and usage instructions. | [KULLANIM_REHBERI.md](KULLANIM_REHBERI.md) |
 
