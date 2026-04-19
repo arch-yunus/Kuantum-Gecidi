@@ -121,22 +121,30 @@ python kaynak/isinlanma_test.py
 
 ---
 
-## 🚀 Geleceğin Kuantum İnterneti
+## 🚀 Geleceğin Kuantum İnterneti: Tekrarlayıcılar ve Takas
 
 Kuantum ışınlanma, sadece tek bir qubiti aktarmakla kalmaz; küresel ölçekte bir **Kuantum İnterneti** kurmanın temel taşıdır.
 
-### Kuantum Tekrarlayıcılar (Repeaters)
-Fiziksel fiber optik kablolarda kuantum bilgisi (fotonlar) mesafe arttıkça kaybolur. Klasik yükselticiler (amplifiers) kuantum bilgisini kopyalayamadığı için (No-Cloning), bu sorunu **Dolanıklık Takası** (Entanglement Swapping) ile aşarız.
+### Dolanıklık Takası (Entanglement Swapping)
+Fiziksel fiber optik kablolarda kuantum bilgisi mesafe arttıkça kaybolur. Klasik yükselticiler kuantum bilgisini kopyalayamadığı için (No-Cloning), bu sorunu **Dolanıklık Takası** ile aşarız.
+
+**Teknik Akış:**
+1.  Alice ve Charlie bir dolanık çift paylaşır.
+2.  Bob ve Charlie de başka bir dolanık çift paylaşır.
+3.  Charlie (ara düğüm), elindeki iki qubit üzerinde bir **Bell Ölçümü** gerçekleştirir.
+4.  Sonuç: Alice ve Bob, fiziksel olarak hiç etkileşime girmeden birbirleriyle dolanık hale gelirler.
+
+| Dolanıklık Takası Devresi |
+| :---: |
+| ![Entanglement Swapping](gorseller/dolaniklik_takasi_devresi.png) |
 
 ```mermaid
 graph LR
-    A[Alice] ---|Dolanik 1| R[Repeater]
+    A[Alice] ---|Dolanik 1| R[Repeater/Charlie]
     R ---|Dolanik 2| B[Bob]
     R -->|Bell Ölçümü| R
-    A -.->|Işınlanmış Bağ| B
+    A -.->|Yeni Dolanik Bağ| B
 ```
-
-*   **Dolanıklık Takası:** İki kısa mesafeli dolanıklık bağı, bir ara düğümde (Repeater) yapılan ölçümle birbirine bağlanır. Bu işlem, Alice ve Bob'un fiziksel olarak hiç karşılaşmadan dolanık hale gelmesini sağlar.
 
 ---
 
