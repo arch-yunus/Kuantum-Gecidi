@@ -16,8 +16,8 @@
 
 | Module | Description | Location |
 | :--- | :--- | :--- |
-| 📚 **Lessons** | Interactive Jupyter Notebooks for learning. | `dersler/` |
-| 🛠 **Source** | Core Qiskit implementation and helpers. | `kaynak/` |
+| 📚 **Lessons** | Interactive Jupyter Notebooks (01-04). | `dersler/` |
+| 🛠 **Source** | Core logic, fidelity analysis and **Gate Teleportation**. | `kaynak/` |
 | 🖼 **Gallery** | Circuit diagrams and visualization results. | `gorseller/` |
 | 📖 **Guide** | Detailed setup and usage instructions. | [KULLANIM_REHBERI.md](KULLANIM_REHBERI.md) |
 
@@ -31,6 +31,39 @@ Kuantum ışınlanma, bir parçacığın üzerindeki kuantum bilgisinin (durumun
 1.  **No-Cloning (Kopyalanamazlık):** Bir kuantum durumu kopyalanamaz; veri aktarıldığında orijinal kaynaktaki bilgi yok olur.
 2.  **Süperpozisyon:** Verinin aynı anda hem 0 hem 1 olasılığını taşıma yeteneği.
 3.  **Dolanıklık (Entanglement):** Einstein'ın "uzaktan ürkütücü etkileşim" dediği, parçacıkların kader birliği.
+
+---
+
+## 🔬 Matematiksel Doğrulama: Yoğunluk Matrisleri
+
+Işınlanma başarısını doğrulamak için Alice'in hazırladığı durum ile Bob'un elde ettiği durumu **Yoğunluk Matrisi** ($\rho$) üzerinden karşılaştırırız.
+
+### Kısmi İz (Partial Trace) Analizi
+Çoklu qubit sisteminden belirli bir qubitin ($q_i$) durumunu çekmek için kısmi iz operatörünü kullanırız:
+$$\rho_{dest} = Tr_{other}(\rho_{total})$$
+
+**Sadakat (Fidelity) Ölçümü:**
+İki kuantum hali ($\rho$ ve $\sigma$) arasındaki benzerlik şu formülle hesaplanır:
+$$F(\rho, \sigma) = \left( Tr \sqrt{\sqrt{\rho} \sigma \sqrt{\rho}} \right)^2$$
+İdeal ışınlanmada $F=1.0$ olmalıdır. Projemizdeki `AnalizAraclari` bu doğrulamayı her testte otomatik olarak gerçekleştirir.
+
+---
+
+## 🧪 Kapı Işınlanması (Gate Teleportation)
+
+Basit veri aktarımının ötesinde, ışınlanma kanalı üzerinden **kuantum işlemciler** arası kapı işlemleri (gate operations) taşınabilir. Bu, evrensel kuantum hesaplamanın ve hata toleranslı (fault-tolerant) mimarilerin temelidir.
+
+### Teknik Mantık: $(I \otimes U)|\Phi^+\rangle$
+Alice ve Bob arasında sadece bir Bell durumu paylaşmak yerine, Bob kendi qubitine önceden bir $U$ kapısı uygular. Teleportasyon gerçekleştiğinde, Alice'in $| \psi \rangle$ durumu Bob'a geçtiğinde otomatik olarak $U| \psi \rangle$ haline gelir.
+
+```mermaid
+graph TD
+    Resource[Gate-Infused Resource] --> |I x U| Channel
+    Alice[Alice State: psi] --> Interaction[Bell Measurement]
+    Channel --> Interaction
+    Interaction --> |Classical Bits| Correction[Bob's Correction]
+    Correction --> Output[Final State: U psi]
+```
 
 ---
 
