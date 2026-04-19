@@ -4,6 +4,7 @@
 [![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 [![Qiskit: 1.0+](https://img.shields.io/badge/Qiskit-1.0+-orange.svg)](https://qiskit.org/)
 [![Build: Success](https://img.shields.io/badge/Build-Success-brightgreen.svg)]()
+![Quantum Teleportation CI](https://github.com/arch-yunus/Kuantum-Gecidi/actions/workflows/python-app.yml/badge.svg)
 
 **Kuantum-Geçidi**, kuantum mekaniğinin en büyüleyici fenomenlerinden biri olan **Kuantum Işınlanma** (Quantum Teleportation) protokolünü modern yazılım perspektifiyle modelleyen, simüle eden ve öğreten kapsamlı bir eğitim platformudur.
 
