@@ -88,6 +88,18 @@ python kaynak/isinlanma_test.py
 
 ---
 
+## 📜 Tarihçe ve Kilometre Taşları
+
+Kuantum ışınlanma, teorik bir öngörüden küresel ölçekte deneylere uzanan büyük bir yolculuktur:
+
+*   **1993 - Teorik Temel:** Charles Bennett ve ekibi, kuantum ışınlanmanın protokolünü ilk kez teorik olarak ortaya koydu.
+*   **1997 - İlk Deney:** Anton Zeilinger ve ekibi (Viyana Üniversitesi), fotonların polarizasyon durumunu ilk kez başarıyla ışınladı.
+*   **2004 - Atomik Işınlanma:** Innsbruck ve NIST ekipleri, bilgiyi atomdan atoma aktarmayı başardı.
+*   **2017 - Micius Uydusu:** Jian-Wei Pan liderliğindeki ekip, Tibet'teki bir istasyondan yörüngedeki **Micius** uydusuna **1,400 km** mesafeden foton ışınlayarak rekor kırdı.
+*   **2020+ - Kuantum İnterneti:** Günümüzde teleportasyon, kıtalararası kuantum ağlarının (Quantum Internet) kalbi olarak kabul edilmektedir.
+
+---
+
 ## 📜 Kaynakça & Teşekkür
 
 1.  **Bennett, C. H. et al.** (1993). "Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels". [Physical Review Letters].
