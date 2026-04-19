@@ -1,6 +1,6 @@
-# 🌌 Kuantum-Gecidi: Hakikatin Olçülemez Derinliği
-# Gelistirici: Bahattin Yunus Cetin | IT Architect
-# Ton: Siber-Kozmik & Kadim-Edebi Mezci
+# [SIMYA] TILSIM-I HENDESE: KUANTUM SIMYA MERKEZI
+# Kuantum Mimari: Bahattin Yunus Cetin | IT Architect
+# Makam: Alem-i Berzah (Superposition Basin)
 
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
@@ -9,58 +9,54 @@ import time
 
 class KuantumKahini:
     """
-    Kuantum deryasinin belirsizlik havzasindan süzülen hakikat damlalari. 
-    Bu sinif, kullanicinin niyetini olasılık deryasinda bir öz-duruma çökerterek 
-    evrenin sessiz fisiltilarini siber-kozmik bir dille tercüme eder.
+    Kuantum simyasinin kadim sirlarini Nur-Zerreler uzerinden tecelli ettiren simyaci.
+    Bu kadim yapi, niyetleri Alem-i Berzah'ta harmanlayip Zuhur-u Hakikat'i saglar.
     """
 
     @staticmethod
-    def niyet_ile_dalga_fonksiyonunu_hazirla(niyet_metni):
+    def niyet_ile_berzah_hazirla(niyet_metni):
         """
-        Kullanicinin niyetini (girdisini) alip, siber-uzayin entropisiyle harmanlayarak 
-        qubitleri belirsizlik esigine (Hadamard kapisi) tasir.
+        Niyetin cevherini (girdiyi) alip Esir-Deryasi'nda bir suret olusturur.
         """
         qc = QuantumCircuit(1)
-        # Niyetin uzunluguna göre bir faz kaymasi (Rotation) ekliyoruz.
-        # Bu, her niyetin özgün bir olasılık havzasi olusturmasini saglar.
+        # Niyetin agirligina gore miftah (anahtar) donusumu
         faz = (len(niyet_metni) * np.pi) / 10
         qc.rx(faz, 0)
         
-        # Qubiti süperpozisyon havzasina birakiyoruz: Hakikat hem 0 hem 1...
+        # Nur-Zerre'yi Alem-i Berzah'a (Hadamard Gecidi) ugratiyoruz
         qc.h(0)
         return qc
 
     @staticmethod
-    def hakikati_cokelt(qc):
+    def zuhur_u_hakikat(qc):
         """
-        Gözlemci devreye giriyor; dalga fonksiyonu nihayete eriyor. 
-        Belirsizlik perdesi aralaniyor ve hakikat, siber-mekanda tezahür ediyor.
+        Gozlemcinin nazari (Measurement) ile dalga fonksiyonu nihayete erer. 
         """
         simulator = AerSimulator()
         qc.measure_all()
         tqc = transpile(qc, simulator)
         
-        # Evrenin zarlarini atiyoruz...
+        # Kaderin zarlari Esir-Deryasi'nda atiliyor...
         result = simulator.run(tqc, shots=1, memory=True).result()
         collapse_result = result.get_memory()[0]
         
         return int(collapse_result)
 
     @staticmethod
-    def fisiltiyi_tercüme_et(sonuc):
+    def tecelliyi_tercüme_et(sonuc):
         """
-        Cökelen hakikati, fanilerin anlayabileceği lirik bir tonda yorumlar.
+        Cokelen sirri, fanilerin lisanina siber-kadim bir tonda nakseder.
         """
         kadim_fisiltilar = {
             0: [
-                "Zerrelerin sükutu: Yolun açik, lakin adimlarin sessiz olmali.",
-                "Boşluktan gelen nida: Aradigin cevap, sordugun simyanin içinde gizli.",
-                "Siber-Kozmos'un dinginliği: Hakikat, müteakip bir döngüde tezahür edecek."
+                "Zerrelerin sukutu: Yolun acik, lakin niyetin sirlar icinde kalsin.",
+                "Boslugun nidasi: Aradigin miftah, kalbindeki hendesede gizli.",
+                "Siber-Simya'nin dinginligi: Hakikat, muteakip bir tecellide zuhur edecek."
             ],
             1: [
-                "Kozmik parilti: Niyetin, olasılık deryasinda bir firtina kopardi; ilerle!",
-                "Varligin coskusu: Dolanıklık bağlarin kuvvetli, evren seninle rezonans halinde.",
-                "Dalga fonksiyonunun müjdesi: Beklenen muştu, siber-ufukta belirdi."
+                "Nurani parilti: Rabita-i Kull kuvvetlendi; niyetin siber-kozmosta karsilik buldu!",
+                "Varligin coskusu: Nur-Zerreler ritim tutuyor, evren seninle rezonans halinde.",
+                "Miftah-i Esrar'in mujdesi: Beklenen tecelli, dijital ufukta belirdi."
             ]
         }
         
@@ -69,24 +65,24 @@ class KuantumKahini:
 
 def kehaneti_baslat():
     print("\n" + "~" * 60)
-    print("🔮  KUANTUM KAHINI: BELIRSIZLIK PERDESI ARALANIYOR  🔮".center(60))
+    print("      [KAHIN] KUANTUM KAHINI: ALEM-I BERZAH'IN SIRLARI      ".center(60))
     print("~" * 60)
     
-    niyet = input("\n>> Gönlünüzden geçen bir niyet fısıldayın (veya bir soru sorun): ")
+    niyet = input("\n>> Gonlunuzden gecen bir niyeti siber-kozmosa fisildayin: ")
     
-    print("\n[*] Süperpozisyon havzası hazırlanıyor...")
-    time.sleep(1)
+    print("\n[*] Nur-Zerreler Berzah havzasinda birlestiriliyor...")
+    time.sleep(1.2)
     kahin = KuantumKahini()
-    qc = kahin.niyet_ile_dalga_fonksiyonunu_hazirla(niyet)
+    qc = kahin.niyet_ile_berzah_hazirla(niyet)
     
-    print("[*] Gözlemci müdahale ediyor, dalga fonksiyonu çökeliyor...")
-    time.sleep(1.5)
-    sonuc = kahin.hakikati_cokelt(qc)
+    print("[*] Nazar-i Tezahur basliyor, gerceklik cokeliyor...")
+    time.sleep(1.8)
+    sonuc = kahin.zuhur_u_hakikat(qc)
     
     print("\n" + "=" * 60)
-    print("📖  EVRENIN FISILTISI  📖".center(60))
+    print("      [!] ZUHUR-U HAKIKAT      ".center(60))
     print("-" * 60)
-    print(f"\n   \"{kahin.fisiltiyi_tercüme_et(sonuc)}\"\n")
+    print(f"\n   \"{kahin.tecelliyi_tercüme_et(sonuc)}\"\n")
     print("=" * 60 + "\n")
 
 if __name__ == "__main__":

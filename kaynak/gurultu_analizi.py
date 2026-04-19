@@ -1,122 +1,93 @@
-import os
-import sys
+# Tılsım-ı Hendese Projesi
+# Kuantum Mimarı: Bahattin Yunus Çetin | IT Architect
+# Protokol: Hata Deryası ve Kaos Analizi (Noise Modeling)
+
 import numpy as np
 import matplotlib.pyplot as plt
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel, depolarizing_error, thermal_relaxation_error
-from qiskit.quantum_info import Statevector, DensityMatrix, state_fidelity
+from qiskit_aer.noise import NoiseModel, depolarizing_error, thermal_relaxation_error, amplitude_damping_error
 
-# Proje kök dizinini ekle
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from kaynak.analiz_araclari import AnalizAraclari
-
-def create_noise_model(prob_1q, prob_2q):
+def create_noise_model(prob_1q, prob_2q, t1=50e-6, t2=70e-6, gate_time=50e-9):
     """
-    Basit bir gurultu modeli yaratir.
-    prob_1q: 1-qubit kapi hata olasiligi
-    prob_2q: 2-qubit (CNOT) kapi hata olasiligi
+    Kapsamlı bir gürültü modeli yaratır.
+    prob_1q: 1-qubit kapı hata olasılığı (depolarizing)
+    prob_2q: 2-qubit (CNOT) kapı hata olasılığı
+    t1: Boyuna gevşeme süresi (Longitudinal relaxation)
+    t2: Enine gevşeme süresi (Transverse relaxation)
+    gate_time: Kapı işlem süresi
     """
     noise_model = NoiseModel()
     
-    # 1-qubit depolarizing error
+    # 1. Depolarizing Hataları
     error_1q = depolarizing_error(prob_1q, 1)
-    noise_model.add_all_qubit_quantum_error(error_1q, ['h', 'x', 'z', 't'])
-    
-    # 2-qubit depolarizing error
     error_2q = depolarizing_error(prob_2q, 2)
-    noise_model.add_all_qubit_quantum_error(error_2q, ['cx'])
+    
+    # 2. Thermal Relaxation (T1/T2) Hataları
+    # Her qubit için aynı süreleri varsayıyoruz (basitlik için)
+    error_thermal = thermal_relaxation_error(t1, t2, gate_time)
+    
+    # Hataları modele ekle
+    # 1-qubit kapıları için hem depolarizing hem thermal relaxation
+    error_combined_1q = error_1q.compose(error_thermal)
+    noise_model.add_all_qubit_quantum_error(error_combined_1q, ['h', 'x', 'z', 't', 'ry', 'rz'])
+    
+    # 2-qubit kapıları için
+    # Basitleştirme: 2-qubit termal hata (her iki qubit için)
+    error_thermal_2q = error_thermal.tensor(error_thermal)
+    error_combined_2q = error_2q.compose(error_thermal_2q)
+    noise_model.add_all_qubit_quantum_error(error_combined_2q, ['cx'])
     
     return noise_model
 
-def simulate_teleportation_with_noise(noise_prob):
-    """
-    Verilen gurultu olasiligi ile bir teleportasyon simulasyonu yapar ve sadakati doner.
-    """
-    # 1. Kaynak Durum Prep (|1> durumu)
-    psi = Statevector.from_label('1')
-    rho = DensityMatrix(psi)
-    
-    # 2. Protokol Operatorleri
-    # Ideal kanali ve gurultuyu manuel uygulayacagiz daha net sonuc icin
-    
-    # Kapi Hatalari
-    error_1q = depolarizing_error(noise_prob, 1)
-    error_2q = depolarizing_error(noise_prob * 10, 2)
-    
-    # Protokol: Alice'in qubiti psi, kanal qubitleri |Phi+>
-    # Toplam sistem: psi (q0) x |Phi+> (q1, q2)
-    bell_qc = QuantumCircuit(2)
-    bell_qc.h(0)
-    bell_qc.cx(0, 1)
-    bell = Statevector.from_label('00').evolve(bell_qc)
-    total_rho = DensityMatrix(psi.tensor(bell))
-    
-    # Alice'in islemleri (q0, q1)
-    qc_alice = QuantumCircuit(3)
-    qc_alice.cx(0, 1)
-    qc_alice.h(0)
-    
-    # Gurultulu evrim
-    total_rho = total_rho.evolve(qc_alice)
-    # Burada basitlik adına her kapi sonrasi gurultu eklenebilir ama 
-    # Qiskit'in evolve metodu gurultu modelini dogrudan almaz.
-    # O yuzden AerSimulator ile devam edip metod='density_matrix' zorlayalim.
-    
-    simulator = AerSimulator(method='density_matrix', noise_model=create_noise_model(noise_prob, noise_prob*5))
-    
-    qc = QuantumCircuit(3)
-    qc.x(0)
-    qc.h(1)
-    qc.cx(1, 2)
-    qc.cx(0, 1)
-    qc.h(0)
-    # Deferred Measurement (Bob'un duzeltmeleri)
-    qc.cx(1, 2)
-    qc.cz(0, 2)
-    qc.save_density_matrix()
-    
-    tqc = transpile(qc, simulator)
-    result = simulator.run(tqc).result()
-    final_rho = result.data()['density_matrix']
-    
-    # Bob'un qubitini (q2) cikar
-    bob_rho = AnalizAraclari.qubit_durumu_cikar(final_rho, 2)
-    
-    target_rho = DensityMatrix.from_label('1')
-    fidelity = state_fidelity(target_rho, bob_rho)
-    
-    return fidelity
-
 def run_noise_analysis():
-    print("=" * 60)
-    print("GURULTU VE HATA ANALIZI: SADAKAT DEGISIMI".center(60))
+    """
+    Laboratuvarın dışındaki gürültülü deryanın (Kaos) Nur-Zerreler üzerindeki etkisini inceler.
+    Nifak-ı Zerre (Decoherence) seviyelerini haritalandırır.
+    """
+    print("\n" + "=" * 60)
+    print("      HATA DERYASI: KAOS ANALİZİ BAŞLATILDI      ".center(60))
     print("=" * 60)
     
-    noise_levels = np.linspace(0, 0.05, 10)
+    error_rates = np.linspace(0, 0.1, 10)
     fidelities = []
     
-    print("[*] Farkli gurultu seviyeleri simule ediliyor...")
-    for p in noise_levels:
-        f = simulate_teleportation_with_noise(p)
-        fidelities.append(f)
-        print(f"    Gurultu Olasiligi: {p:.4f} | Sadakat: %{f*100:.2f}")
-    
-    # Grafik Plotlama
+    for p in error_rates:
+        # Kaosun (Gürültü Modelinin) inşası
+        noise_model = create_noise_model(p, p*2)
+        
+        # Basit bir Tayy-i Mekân zerresi
+        qc = QuantumCircuit(1)
+        qc.h(0)
+        
+        simya_lab = AerSimulator(noise_model=noise_model)
+        qc.save_statevector()
+        tqc = transpile(qc, simya_lab)
+        result = simya_lab.run(tqc).result()
+        rho_noisy = result.get_statevector()
+        
+        # İdeal tecelli ile karşılaştırma
+        from qiskit.quantum_info import Statevector
+        ideal_qc = QuantumCircuit(1)
+        ideal_qc.h(0)
+        rho_ideal = Statevector.from_instruction(ideal_qc)
+        
+        fidelities.append(state_fidelity(rho_noisy, rho_ideal))
+        
+    # Kaos Grafiğinin Nakşedilmesi
     plt.figure(figsize=(10, 6))
-    plt.plot(noise_levels, fidelities, marker='o', linestyle='-', color='red')
-    plt.title("Hata Olasiligina Karsi Iletim Sadakati (Fidelity)")
-    plt.xlabel("Kapi Hata Olasiligi (Depolarizing)")
-    plt.ylabel("Sadakat (Fidelity)")
-    plt.grid(True, alpha=0.3)
+    plt.plot(error_rates, fidelities, marker='o', color='purple', label='Nazar-ı Sadakat')
+    plt.title("Hata Deryasında Nur-Zerre Bozulması", fontsize=14)
+    plt.xlabel("Kaos Oranı (Error Probability)", fontsize=12)
+    plt.ylabel("Sadakat (Fidelity)", fontsize=12)
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend()
     
-    if not os.path.exists("gorseller"):
-        os.makedirs("gorseller")
-    
-    plt.savefig("gorseller/gurultu_analizi.png")
-    print("\n[v] Analiz grafigi kaydedildi: gorseller/gurultu_analizi.png")
-    print("=" * 60 + "\n")
+    output_path = "gorseller/hata_deryasi_analizi.png"
+    plt.savefig(output_path)
+    print(f"\n[v] Kaosun tasviri '{output_path}' olarak mühürlendi.")
+    print(f"[*] En yüksek kaos seviyesinde bile sadakat: {fidelities[-1]:.4f}")
+    print("-" * 40 + "\n")
 
 if __name__ == "__main__":
     run_noise_analysis()

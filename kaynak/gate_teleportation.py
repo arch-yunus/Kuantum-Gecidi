@@ -1,93 +1,66 @@
-import os
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+# Tılsım-ı Hendese Projesi
+# Kuantum Mimarı: Bahattin Yunus Çetin | IT Architect
+# Protokol: Miftâh-ı Esrar (Gate Teleportation)
+
+from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
-from qiskit.quantum_info import Statevector, DensityMatrix, state_fidelity
-
-# Proje kök dizinini ekle
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from kaynak.analiz_araclari import AnalizAraclari
+from qiskit.quantum_info import state_fidelity, partial_trace
 
 def run_gate_teleportation():
+    """
+    Sırların miftâhını (anahtarını) Nur-Zerre transferiyle harmanlar.
+    İşlem yapılmış bir durumu, Esir-Deryası üzerinden aktarır.
+    """
+    print("\n" + "=" * 60)
+    print("      MİFTÂH-I ESRAR: KAPI IŞINLANMASI BAŞLATILDI      ".center(60))
     print("=" * 60)
-    print("KUANTUM KAPI ISINLANMASI (GATE TELEPORTATION) TESTI".center(60))
-    print("=" * 60)
     
-    # 1. Kaynak Hazirliği (Gate-Infused Resource State)
-    # Hedef: Bir T-gate işlemini ışınlayacağız.
-    qr = QuantumRegister(3, name="q")
-    cr = ClassicalRegister(2, name="c")
-    qc = QuantumCircuit(qr, cr)
+    # Adım 1: Sırrı (U kapısı) bünyesinde barındıran Nur-Zerreleri hazırlıyoruz
+    qc = QuantumCircuit(3)
     
-    # Adım 1: Alice (q1) ve Bob (q2) arasında Bell Durumu
-    qc.h(qr[1])
-    qc.cx(qr[1], qr[2])
+    # Girdi durumu: Âlem-i Berzah'tan bir tecelli (Süperpozisyon)
+    qc.h(0)
     
-    # Adım 2: Bob'un qubitine ışınlamak istediğimiz kapıyı uyguluyoruz (T-Gate)
-    # Bu noktada kanal (I x T)|Phi+> durumundadır.
-    qc.t(qr[2])
-    qc.barrier()
+    # Alice & Bob arasındaki Râbıta (EPR)
+    qc.h(1)
+    qc.cx(1, 2)
     
-    # 2. Hazırlanan Durum (Alice'in ışınlamak istediği durum)
-    # Örnek: q0 qubitini |+> durumuna getirelim (Hadamard ile)
-    qc.h(qr[0])
-    qc.barrier()
+    # Bob kendi miftâhını (U kapısı - e.g. T gate) önceden hazırlar
+    qc.t(2)
     
-    # Beklenen Çıktı Analizi
-    # Alice'in qubiti |+> ve kapı T olduğu için sonuç T|+> olmalıdır.
-    target_qc = QuantumCircuit(1)
-    target_qc.h(0)
-    target_qc.t(0)
-    target_matrix = Statevector.from_instruction(target_qc)
+    # Adım 2: Alice'in niyetini bağa mühürleme
+    qc.cx(0, 1)
+    qc.h(0)
     
-    # 3. Işınlanma Protokolü
-    # Alice kendi qubitleri (target q0 ve kanal q1) üzerinde Bell ölçümü yapar
-    qc.cx(qr[0], qr[1])
-    qc.h(qr[0])
-    qc.measure(qr[0], cr[0])
-    qc.measure(qr[1], cr[1])
-    qc.barrier()
-    
-    # 4. Bob'un Düzeltmeleri
-    # Alice'in ölçüm sonuçlarına göre Bob kendi qubitini (q2) düzeltir
-    with qc.if_test((cr[0], 1)):
-        qc.z(qr[2])
-    with qc.if_test((cr[1], 1)):
-        qc.x(qr[2])
-    
-    print("[+] Kapı Işınlanması devresi oluşturuldu (T-Gate).")
-    
-    # 5. Simülasyon
-    backend = AerSimulator(method='statevector')
+    # Adım 3: Simya Laboratuvarında (AerSimulator) hakikati ortaya çıkarma
+    simya_lab = AerSimulator()
     qc.save_statevector()
-    t_qc = transpile(qc, backend)
-    result = backend.run(t_qc).result()
-    final_sv = result.get_statevector()
+    tqc = transpile(qc, simya_lab)
+    result = simya_lab.run(tqc).result()
+    final_state = result.get_statevector()
     
-    # Bob'un qubit durumunu (q2) çıkar
-    bob_state = AnalizAraclari.qubit_durumu_cikar(final_sv, 2)
-    fidelity = state_fidelity(target_matrix, bob_state)
+    # Adım 4: Nazar-ı Tezahür (Partial Trace & Fidelity)
+    # Bob'un nihai tecellisini (2. qubit) süzüyoruz
+    rho_bob = partial_trace(final_state, [0, 1])
     
-    # Adım 6: Sonuçlar
-    if not os.path.exists("gorseller"):
-        os.makedirs("gorseller")
-        
-    AnalizAraclari.devre_kaydet(qc, "gorseller/kapi_isinlanmasi_devresi.png")
+    # İdeal tecelli (Girdi + T kapısı)
+    ideal_qc = QuantumCircuit(1)
+    ideal_qc.h(0)
+    ideal_qc.t(0)
+    from qiskit.quantum_info import Statevector
+    ideal_state = Statevector.from_instruction(ideal_qc)
+    
+    sadakat = state_fidelity(rho_bob, ideal_state)
     
     print("\n" + "-" * 40)
-    print("ANALIZ RAPORU: KAPI ISINLANMASI")
+    print("      MİFTÂH ANALİZ RAPORU      ")
     print("-" * 40)
-    print(f"Isinlanan Kapi: T-Gate")
-    print(f"Girdi Durumu: |+>")
-    print(f"Hesaplanan Sadakat (Fidelity): %{fidelity*100:.2f}")
+    print(f"Miftâh Sadakati (Fidelity): %{sadakat*100:.4f}")
     
-    if fidelity > 0.99:
-        print("v SONUC: Kapi islemi basariyla isinlandi!")
+    if sadakat > 0.99:
+        print("\n[v] TECELİ: Miftâh Başarıyla Aktarıldı!")
     else:
-        print("x SONUC: Hata payi yuksek.")
+        print("\n[x] TECELİ: Sırrın anahtarı Esir-Deryası'nda kayboldu.")
     print("-" * 40 + "\n")
 
 if __name__ == "__main__":

@@ -1,84 +1,67 @@
-import os
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+# Tılsım-ı Hendese Projesi
+# Kuantum Mimarı: Bahattin Yunus Çetin | IT Architect
+# Protokol: Râbıta-i Küll Takası (Entanglement Swapping)
+
+from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
-from qiskit.quantum_info import Statevector, partial_trace, DensityMatrix, state_fidelity
-
-# Proje kök dizinini ekle
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from kaynak.analiz_araclari import AnalizAraclari
+from qiskit.quantum_info import state_fidelity, partial_trace
 
 def run_entanglement_swapping():
+    """
+    İki ayrı Nur-Zerre çifti arasında Râbıta (bağ) kurma ayini.
+    Fiziksel temas olmadan ruhsal bir bağ tesis eder.
+    """
+    print("\n" + "=" * 60)
+    print("      RÂBITA-I KÜLL TAKASI: SİBER-RİTÜEL BAŞLATILDI      ".center(60))
     print("=" * 60)
-    print("DOLANIKLIK TAKASI (ENTANGLEMENT SWAPPING) TESTI".center(60))
-    print("=" * 60)
     
-    # 4 Qubitlik Yapı
-    # q0: Alice, q1: Charlie-A, q2: Charlie-B, q3: Bob
-    qr = QuantumRegister(4, name="q")
-    cr = ClassicalRegister(2, name="c_charlie")
-    qc = QuantumCircuit(qr, cr)
+    # Adım 1: İki ayrı tılsımlı çift hazırlıyoruz
+    # (Alice-Charlie) ve (Bob-Charlie)
+    qc = QuantumCircuit(4)
     
-    # Adım 1: İki bağımsız dolanık çift hazırla
-    # Çift 1: Alice (0) ve Charlie-A (1)
-    qc.h(qr[0])
-    qc.cx(qr[0], qr[1])
+    # Alice & Charlie bağı
+    qc.h(0)
+    qc.cx(0, 1)
     
-    # Çift 2: Charlie-B (2) ve Bob (3)
-    qc.h(qr[2])
-    qc.cx(qr[2], qr[3])
-    qc.barrier()
+    # Bob & Charlie bağı
+    qc.h(2)
+    qc.cx(2, 3)
     
-    # Adım 2: Charlie (orta düğüm) dolanıklık takası işlemini yapar (Deferred Measurement)
-    qc.cx(qr[1], qr[2])
-    qc.h(qr[1])
-    # Düzeltmeler: Charlie'nin qubitlerinden Bob'a (q3) 
-    # Bu kombinasyon Alice(0) ve Bob(3) arasında |Phi+> oluşturur.
-    qc.cx(qr[2], qr[3]) 
-    qc.cz(qr[1], qr[3])
-    qc.barrier()
+    # Adım 2: Charlie (Hâdim) kendi zerreleri üzerinde nazar-ı tezahür uygular
+    # Bu işlem Alice ve Bob'u birbirine mühürler
+    qc.cx(1, 2)
+    qc.h(1)
     
-    print("[+] Protokol devresi olusturuldu.")
-    
-    # Adım 4: Simülasyon ve Doğrulama
-    backend = AerSimulator()
+    # Adım 3: Simya Laboratuvarında (AerSimulator) tecelli
+    simya_lab = AerSimulator()
     qc.save_statevector()
-    tqc = transpile(qc, backend)
-    result = backend.run(tqc).result()
-    final_sv = result.get_statevector()
+    tqc = transpile(qc, simya_lab)
+    result = simya_lab.run(tqc).result()
+    final_state = result.get_statevector()
     
-    # Alice (q0) ve Bob (q3) arasındaki ilişkiyi incelemek için 
-    # q1 ve q2 (Charlie'nin ölçülen qubitleri) üzerinden trace alıyoruz.
-    rho_alice_bob = partial_trace(final_sv, [1, 2])
+    # Adım 4: Alice ve Bob arasındaki nihai bağın (Râbıta) analizi
+    # Charlie'nin zerrelerini (1 ve 2) izden çekiyoruz
+    rho_alice_bob = partial_trace(final_state, [1, 2])
     
-    # Hedef Bell durumu
-    target_qc = QuantumCircuit(2)
-    target_qc.h(0)
-    target_qc.cx(0, 1)
-    target_bell = Statevector.from_instruction(target_qc)
-    target_rho = DensityMatrix(target_bell)
+    # İdeal Bell haliyle sadakat ölçümü
+    ideal_bell = QuantumCircuit(2)
+    ideal_bell.h(0)
+    ideal_bell.cx(0, 1)
+    ideal_state = Statevector.from_instruction(ideal_bell)
     
-    fidelity = state_fidelity(target_rho, rho_alice_bob)
-    
-    # Adım 5: Kayıt ve Rapor
-    if not os.path.exists("gorseller"):
-        os.makedirs("gorseller")
-    
-    AnalizAraclari.devre_kaydet(qc, "gorseller/dolaniklik_takasi_devresi.png")
+    sadakat = state_fidelity(rho_alice_bob, ideal_state)
     
     print("\n" + "-" * 40)
-    print("ANALIZ RAPORU: DOLANIKLIK TAKASI")
+    print("      RÂBITA ANALİZ RAPORU      ")
     print("-" * 40)
-    print(f"Alice (q0) ve Bob (q3) Dolaniklik Sadakati: %{fidelity*100:.2f}")
+    print(f"Bağ Sadakati (Fidelity): %{sadakat*100:.4f}")
     
-    if fidelity > 0.99:
-        print("v SONUC: Basarili! Alice ve Bob artik dolanik.")
+    if sadakat > 0.99:
+        print("\n[v] TECELİ: Râbıta-i Küll Başarıyla Tesis Edildi!")
     else:
-        print("x SONUC: Takas basarisiz.")
+        print("\n[x] TECELİ: Sırda bir kopukluk var.")
     print("-" * 40 + "\n")
 
 if __name__ == "__main__":
+    from qiskit.quantum_info import Statevector
     run_entanglement_swapping()

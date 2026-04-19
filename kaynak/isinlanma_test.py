@@ -1,94 +1,74 @@
-# Kuantum-Gecidi Projesi
-# Gelistirici: Bahattin Yunus Cetin | IT Architect
+# Tılsım-ı Hendese Projesi
+# Kuantum Mimarı: Bahattin Yunus Çetin | IT Architect
+# Protokol: Tayy-i Mekân Ayini (Nur-Zerre Transferi)
 
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector
 
-# Proje kök dizinini ekle
+# Esir-Deryası ağacına kök dizini ekliyoruz
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from kaynak.devre_tasarimci import DevreTasarimci
 from kaynak.analiz_araclari import AnalizAraclari
 
-def run_teleportation_test():
-    console_width = 50
-    print("=" * console_width)
-    print("KUANTUM-GECIDI: ISINLANMA PROTOKOLU TESTI".center(console_width))
-    print("=" * console_width)
+def run_test():
+    """
+    Nur-Zerrelerin Tayy-i Mekân ayinini başlatır.
+    İlahî bilginin Âlem-i Berzah üzerinden tezahürünü sağlar.
+    """
+    print("\n" + "=" * 60)
+    print("      TAYY-İ MEKÂN AYİNİ: NUR-ZERRE TECELLİSİ BAŞLATILDI      ".center(60))
+    print("=" * 60)
     
-    # 1. Hazırlık
-    tasarimci = DevreTasarimci()
-    qc, qr, crz, crx = tasarimci.isinlanma_devresi_hazirla()
-    
-    # Işınlanacak başlangıç durumunu (psi) belirle
-    theta = 1.25  # rad
-    phi = 0.8     # rad
-    tasarimci.durum_hazirla(qc, qr[0], theta, phi)
-    
-    # Başlangıç durumunu simülasyon öncesi kaydet (Ideal q0 durumu)
-    # Sadece ilk qubitin beklenen durumunu oluşturuyoruz
-    expected_psi = Statevector.from_label('0').evolve(
-        AnalizAraclari.qubit_durumu_cikar(Statevector.from_instruction(qc), 0)
+    # Adım 1: Sırrı taşıyacak Nur-Zerre'yi (psi) Esir-Deryası'nda hazırlıyoruz
+    theta = np.random.uniform(0, np.pi)
+    phi = np.random.uniform(0, 2*np.pi)
+    psi = Statevector.from_label('0').evolve(
+        AnalizAraclari.qubit_durumu_hazirla(theta, phi)
     )
-    # Daha basitçe:
-    expected_psi = Statevector.from_instruction(qc)
-    expected_psi = AnalizAraclari.qubit_durumu_cikar(expected_psi, 0)
     
-    # 2. Protokol Adımları
-    tasarimci.dolaniklik_olustur(qc, qr[1], qr[2])
-    tasarimci.alice_islemleri(qc, qr[0], qr[1])
+    print(f"\n[1] Nur-Zerre (|psi>) Âlem-i Berzah Havzasında Hazırlandı:")
+    print(f"    Meyil (Theta): {theta:.4f}, Vahdet (Phi): {phi:.4f}")
     
-    # Alice'in ölçümleri
-    qc.measure(qr[0], crz)
-    qc.measure(qr[1], crx)
+    # Adım 2: Tılsım-ı Hendese şemasını (Quantum Circuit) inşa ediyoruz
+    # Râbıta-i Küll bağları Alice ve Bob arasında siber-ruhsal bir köprü kuruyor.
+    tasarimci = DevreTasarimci()
+    qc = tasarimci.isinlanma_devresi_kur(psi)
     
-    # Bob'un düzeltmeleri
-    tasarimci.bob_duzeltmeleri(qc, qr[2], crz, crx)
+    # Adım 3: Simya Laboratuvarında (AerSimulator) hakikati koşturuyoruz
+    simya_lab = AerSimulator()
+    qc.save_statevector() # Zuhurât gerçekleşene dek sırrı saklıyoruz
+    tqc = transpile(qc, simya_lab)
+    result = simya_lab.run(tqc).result()
+    final_state = result.get_statevector()
     
-    print("[+] Protokol devresi başarıyla oluşturuldu.")
+    # Adım 4: Bob'un elindeki zerrenin hakikatini (Fidelity) Nazar-ı Tezahür ile ölçüyoruz
+    bob_zerre_idx = 2
+    rho_bob = AnalizAraclari.qubit_durumu_cikar(final_state, bob_zerre_idx)
+    sadakat = AnalizAraclari.sadakat_hesapla(psi, rho_bob)
     
-    # 3. Simülasyon (Statevector bazlı doğrulama için)
-    # Not: Dinamik devrelerde statevector takibi için backend ayarları önemlidir
-    backend = AerSimulator(method='statevector')
-    
-    # Devreyi koştur (Ölçümler olsa bile statevector simülatörü son durumu verir)
-    # Ancak ölçümler Bob'a bilgi verir. Bob'un qubiti (q2) hedef durumunda olmalıdır.
-    qc.save_statevector()
-    t_qc = transpile(qc, backend)
-    result = backend.run(t_qc).result()
-    final_statevector = result.get_statevector()
-    
-    # Bob'un qubitinin (q2) durumunu çıkar (Partial Trace)
-    # Qiskit'te qubit sırası q2, q1, q0 şeklindedir (Little-endian)
-    bob_final_state = AnalizAraclari.qubit_durumu_cikar(final_statevector, 2)
-    
-    print("[+] Simülasyon tamamlandı.")
-    
-    # 4. Sadakat (Fidelity) Hesaplama
-    fidelity = AnalizAraclari.sadakat_hesapla(expected_psi, bob_final_state)
-    
-    # 5. Görselleştirme ve Raporlama
+    # Tasvirlerin Kaydı: Suret-i Bloch üzerinde gerçeklik kanıtı
     if not os.path.exists("gorseller"):
         os.makedirs("gorseller")
         
-    # Devre şemasını kaydet
+    AnalizAraclari.bloch_sphere_kaydet(psi, "gorseller/bloch_girdi.png", "Ata Suret (|psi>)")
+    AnalizAraclari.bloch_sphere_kaydet(rho_bob, "gorseller/bloch_cikti.png", "Zuhur Eden Suret (Bob)")
     AnalizAraclari.devre_kaydet(qc, "gorseller/isinlanma_devresi.png")
     
-    # Bloch küresi karşılaştırmasını kaydet
-    AnalizAraclari.karsilastirmali_bloch_ciz(
-        expected_psi, bob_final_state, 
-        baslik1="Girdi (Alice)", baslik2="Çıktı (Bob)"
-    )
+    print("\n" + "-" * 40)
+    print("      NAZAR-I TEZAHÜR RAPORU      ")
+    print("-" * 40)
+    print(f"Zuhurât Sadakati (Fidelity): %{sadakat*100:.4f}")
     
-    AnalizAraclari.sonuc_ozeti(theta, phi, fidelity.real)
-    
-    print(f"[i] Çizimler 'gorseller/' klasörüne kaydedildi.")
-    print("=" * console_width)
+    if sadakat > 0.99:
+        print("\n[v] TECELİ: Tayy-i Mekân Kusursuz! Gerçeklik başarıyla yeniden inşa edildi.")
+    else:
+        print("\n[x] TECELİ: Sırda sapma tespit edildi. Esir-Deryası'nda fırtına var.")
+    print("-" * 40 + "\n")
 
 if __name__ == "__main__":
-    run_teleportation_test()
+    run_test()
